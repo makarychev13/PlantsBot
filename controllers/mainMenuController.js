@@ -1,3 +1,5 @@
+'use strict'
+
 const Markup = require('telegraf/markup')
 const messages = require('../data/message.json')
 
@@ -14,7 +16,8 @@ function myPlantsCommand(ctx) {
 }
 
 function timeSettingsCommand(ctx) {
-    ctx.reply('Сейачас вы получаете уведомления в. Если хотите изменить время, то курлык', Markup.keyboard([['Назад']]).resize().extra())
+    const keyboard = [['Настроить время уведомления'], ['Назад']]
+    ctx.reply('Сейачас вы получаете уведомления в. Если хотите изменить время, то курлык', Markup.keyboard(keyboard).resize().extra())
     ctx.scene.enter('time-menu')
 }
 

@@ -1,3 +1,5 @@
+'use strict'
+
 const messages = require('../data/message.json')
 const Markup = require('telegraf/markup')
 
