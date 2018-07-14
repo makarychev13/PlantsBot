@@ -10,7 +10,11 @@ const plantsMenuController = require('./controllers/plantsMenuController')
 const timeMenuController = require('./controllers/timeMenuController')
 const addPlantController = require('./controllers/addPlantController')
 const setTimeController = require('./controllers/setTimeController')
-require('dotenv').config()
+const { checkCorrectConfig } = require('./config/checkCorrectConfig')
+const { User, Plant } = require('./database/index')
+const config = require('dotenv').config()
+
+checkCorrectConfig(config.parsed)
 
 const mainMenu = new Scene('main-menu')
 mainMenu.enter(mainMenuController.enter)
