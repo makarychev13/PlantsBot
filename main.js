@@ -45,11 +45,7 @@ setTime.hears(/[\d]+:\d\d/, setTimeController.getTimeNotify)
 setTime.use(setTimeController.getTimezone)
 
 const stage = new Stage()
-stage.register(mainMenu)
-stage.register(plantsMenu)
-stage.register(timeMenu)
-stage.register(addPlant)
-stage.register(setTime)
+stage.register(mainMenu, plantsMenu, timeMenu, addPlant, setTime)
 
 const bot = new Telegraf(process.env.TELEGRAM_TOKEN)
 bot.catch(err => console.log(err))

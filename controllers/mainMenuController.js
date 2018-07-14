@@ -4,9 +4,8 @@ const Markup = require('telegraf/markup')
 const messages = require('../data/message.json')
 
 function enter(ctx) {
-    ctx.reply(messages.start, Markup.keyboard([['Мои растения'], ['Время уведомления']])
-                                    .resize()
-                                    .extra())
+    const keyboard = [['Мои растения'], ['Время уведомления']]
+    ctx.reply(messages.start, Markup.keyboard(keyboard).resize().extra())
 }
 
 function myPlantsCommand(ctx) {
