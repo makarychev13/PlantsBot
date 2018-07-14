@@ -1,8 +1,5 @@
 'use strict'
 
-const messages = require('../data/message.json')
-const Markup = require('telegraf/markup')
-
 function startReply(ctx) {
     ctx.scene.enter('main-menu')
 }

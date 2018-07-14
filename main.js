@@ -31,13 +31,14 @@ timeMenu.hears(/Назад/, commonController.goToMainMenu)
 timeMenu.use(timeMenuController.wrongTimeFormat)
 
 const addPlant = new Scene('add-plant')
+addPlant.hears(/Назад/, commonController.goToMainMenu)
 addPlant.hears(/\d+/, addPlantController.getWateringPeriod)
 addPlant.use(addPlantController.getPlantName)
 
 const setTime = new Scene('set-time')
 setTime.enter(setTimeController.enter)
 setTime.hears(/[\d]+:\d\d/, setTimeController.getTimeNotify)
-setTime.hears(/\W+/, setTimeController.getTimezone)
+setTime.use(setTimeController.getTimezone)
 
 const stage = new Stage()
 stage.register(mainMenu)
@@ -47,6 +48,7 @@ stage.register(addPlant)
 stage.register(setTime)
 
 const bot = new Telegraf(process.env.TELEGRAM_TOKEN)
+bot.catch(err => console.log(err))
 bot.use(session())
 bot.use(stage.middleware())
 bot.start(commonController.startReply)
