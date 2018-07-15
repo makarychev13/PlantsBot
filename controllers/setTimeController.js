@@ -1,6 +1,7 @@
 'use strict'
 const { geo } = require('../geo/index')
 const { transliterate } = require('../geo/translit')
+const Users = require('../database/repositories/userRepository')
 
 function enter(ctx) {
     ctx.reply('Когда вы хотите получать уведомления?')
@@ -18,8 +19,22 @@ async function getTimezone(ctx) {
         try {
             const translitCity = transliterate(ctx.message.text)
             const timeZone = await geo.getTimeZoneByString(translitCity.toLowerCase())
-            ctx.reply('Часовой пояс успешно сохранён!')
-            ctx.scene.enter('main-menu')
+            const timeNotify = ctx.session.timeNotify
+            const indexOfColon = timeNotify.indexOf(':')
+            const minute = parseInt(timeNotify.substr(indexOfColon + 1, 2))
+            let hour = parseInt(timeNotify.substr(0, indexOfColon)) 
+            hour -= timeZone
+            if (hour >= 24) {
+                hour -= 24
+            } else if (hour < 0) {
+                hour += 24
+            }
+            await Users.saveUser({
+                telegramId: ctx.message.from.id,
+                time: `${hour}:${minute}`
+            })
+            await ctx.reply('Часовой пояс успешно сохранён!')
+            await ctx.scene.enter('main-menu')
         } catch (err) {
             ctx.reply('Не удалось узнать часовой пояс. Попробуйте ещё')
         }

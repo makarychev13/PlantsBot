@@ -11,6 +11,7 @@ const Plant = connect.define('plants', {
     },
     user_id: {
         type: Sequelize.STRING,
+        unique: true,
         allowNull: false
     },
     last_watering_date: {

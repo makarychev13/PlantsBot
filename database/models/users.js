@@ -11,15 +11,19 @@ const User = connect.define('users', {
     },
     telegram_id: {
         type: Sequelize.STRING,
+        unique: true,
         allowNull: false
     },
     notification_time: {
-        type: Sequelize.TIME,
-        allowNull: false
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+            len: [3,5]
+        }
     }
 })
 
-User.sync().catch(err => consol.err(`Не удалось создать таблицу users: ${err}`))
+User.sync({force: true}).catch(err => consol.err(`Не удалось создать таблицу users: ${err}`))
 
 module.exports = {
     User
