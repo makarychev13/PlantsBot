@@ -6,6 +6,7 @@ async function getTimeByTelegramId(telegramId) {
     if (!telegramId) {
         return null
     }
+    
     const user = await User.findAll({
         attributes: ['notification_time'],
         where: {
@@ -14,6 +15,17 @@ async function getTimeByTelegramId(telegramId) {
     })
 
     return user.length !== 0 ? user[0].notification_time : null
+}
+
+async function isUserSaveInDb(telegramId) {
+    const user = await User.findAll({
+        attributes: ['id'],
+        where: {
+            telegram_id: telegramId
+        }
+    })
+
+    return user.length !== 0 ? true : false
 }
 
 function saveUser(user) {
@@ -25,5 +37,6 @@ function saveUser(user) {
 
 module.exports = {
     getTimeByTelegramId,
-    saveUser
+    saveUser,
+    isUserSaveInDb
 }

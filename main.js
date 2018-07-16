@@ -36,8 +36,7 @@ timeMenu.use(timeMenuController.wrongTimeFormat)
 
 const addPlant = new Scene('add-plant')
 addPlant.hears(/Назад/, commonController.goToMainMenu)
-addPlant.hears(/\d+/, addPlantController.getWateringPeriod)
-addPlant.use(addPlantController.getPlantName)
+addPlant.hears(/[a-z]+|[а-я]+/i, addPlantController.getPlantName)
 
 const setTime = new Scene('set-time')
 setTime.enter(setTimeController.enter)
@@ -52,6 +51,7 @@ bot.catch(err => console.log(err))
 bot.use(session())
 bot.use(stage.middleware())
 bot.start(commonController.startReply)
+bot.on('callback_query', addPlantController.getWateringPeriod)
 bot.startPolling()
 
 console.log('PlantsBot успешно запущен')

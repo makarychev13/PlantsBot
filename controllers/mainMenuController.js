@@ -22,7 +22,7 @@ async function timeSettingsCommand(ctx) {
         let message = time ? `Вы получаете уведомления в ${time}. Что хотите сделать?`
                            : 'У вас не настроено время уведомления. Хотите настроить его?' 
         const keyboard = [['Настроить время уведомления'], ['Назад']]
-        ctx.reply(message, Markup.keyboard(keyboard).resize().extra())
+        await ctx.reply(message, Markup.keyboard(keyboard).resize().extra())
         ctx.scene.enter('time-menu')
     } catch (err) {
         await ctx.reply('У нас возникли проблемы. Попробуйте ещё раз')
