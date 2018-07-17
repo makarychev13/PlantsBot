@@ -11,7 +11,6 @@ const timeMenuController = require('./controllers/timeMenuController')
 const addPlantController = require('./controllers/addPlantController')
 const setTimeController = require('./controllers/setTimeController')
 const { checkCorrectConfig } = require('./config/checkCorrectConfig')
-const { User, Plant } = require('./database/index')
 const config = require('dotenv').config()
 
 checkCorrectConfig(config.parsed)

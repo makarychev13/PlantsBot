@@ -9,9 +9,8 @@ const Plant = connect.define('plants', {
         primaryKey: true,
         autoIncrement: true
     },
-    user_id: {
+    user_telegram_id: {
         type: Sequelize.STRING,
-        unique: true,
         allowNull: false
     },
     last_watering_date: {
@@ -28,7 +27,7 @@ const Plant = connect.define('plants', {
     }
 })
 
-Plant.sync({force: true}).catch(err => consol.err(`Не удалось создать таблицу plants: ${err}`))
+Plant.sync().catch(err => consol.err(`Не удалось создать таблицу plants: ${err}`))
 
 module.exports = {
     Plant

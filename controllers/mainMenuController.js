@@ -3,6 +3,7 @@
 const Markup = require('telegraf/markup')
 const messages = require('../data/message.json')
 const Users = require('../database/repositories/userRepository')
+const Plants = require('../database/repositories/plantRepository')
 
 function enter(ctx) {
     const keyboard = [['Мои растения'], ['Время уведомления']]
@@ -10,8 +11,18 @@ function enter(ctx) {
 }
 
 async function myPlantsCommand(ctx) {
-    const keyboard = [['Добавить растения'], ['Удалить растения'], ['Изменить время полива'], ['Назад']]
-    await ctx.reply(messages.myPlantsStart, Markup.keyboard(keyboard).resize().extra())
+    const plants = await Plants.getAllPlantsName(ctx.message.from.id)
+    let message
+    let keyboard
+    if (plants.length !== 0) {
+        const plantsNameList = plants.map(plant => plant.name).join("\n")
+        message = `Список ваших растений:\n${plantsNameList}\n\nЧто хотите сделать?`
+        keyboard = [['Добавить растения'], ['Удалить растения'], ['Изменить время полива'], ['Назад']]
+    } else {
+        message = 'Список ваших растений пуст. Что хотите сделать?'
+        keyboard = [['Добавить растения'], ['Назад']]
+    }
+    await ctx.reply(message, Markup.keyboard(keyboard).resize().extra())
     ctx.scene.enter('plants-menu')
 }
 

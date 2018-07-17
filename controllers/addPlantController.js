@@ -20,30 +20,28 @@ function getPlantName(ctx) {
 
 async function getWateringPeriod(ctx) {
     ctx.telegram.answerCbQuery(ctx.callbackQuery.id)
-    if (!ctx.callbackQuery.data) {
+    if (!ctx.callbackQuery.data || !ctx.session.plantName) {
         return
     }
 
-    if (ctx.session.plantName) {
-        const plant = {
-            name: ctx.session.plantName,
-            period: ctx.callbackQuery.data
-        }
-        try {
-            await Plants.savePlant(plant, ctx.callbackQuery.from.id)
-            ctx.session = null
-            const isSaveUser = await Users.isUserSaveInDb(ctx.callbackQuery.from.id)
-            if (isSaveUser) {
-                await ctx.reply('Растение успешно сохранено!')
-                ctx.scene.enter('main-menu')
-            } else {
-                await ctx.reply('Растение успешно сохранено! Но у вас не настроено время уведомления')
-                ctx.scene.enter('set-time')
-            }
-        } catch (err) {
-            await ctx.reply('У нас возникли какие-то ошибки. Попробуйте ещё раз')
+    const plant = {
+        name: ctx.session.plantName,
+        period: ctx.callbackQuery.data
+    }
+    try {
+        await Plants.savePlant(plant, ctx.callbackQuery.from.id)
+        ctx.session = null
+        const isSaveUser = await Users.isUserSaveInDb(ctx.callbackQuery.from.id)
+        if (isSaveUser) {
+            await ctx.reply('Растение успешно сохранено!')
             ctx.scene.enter('main-menu')
+        } else {
+            await ctx.reply('Растение успешно сохранено! Но у вас не настроено время уведомления')
+            ctx.scene.enter('set-time')
         }
+    } catch (err) {
+        await ctx.reply('У нас возникли какие-то ошибки. Попробуйте ещё раз')
+        ctx.scene.enter('main-menu')
     }
 }
 
