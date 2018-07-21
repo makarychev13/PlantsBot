@@ -19,6 +19,7 @@ const Plant = connect.define('plants', {
     },
     name: {
         type: Sequelize.STRING,
+        unique: true,
         allowNull: false
     },
     period: {

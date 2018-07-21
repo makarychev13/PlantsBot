@@ -15,7 +15,7 @@ async function myPlantsCommand(ctx) {
     let message
     let keyboard
     if (plants.length !== 0) {
-        const plantsNameList = plants.map(plant => plant.name).join("\n")
+        const plantsNameList = plants.map(p => p.name.charAt(0).toUpperCase() + p.name.slice(1)).join("\n")
         message = `Список ваших растений:\n${plantsNameList}\n\nЧто хотите сделать?`
         keyboard = [['Добавить растения'], ['Удалить растения'], ['Изменить время полива'], ['Назад']]
     } else {

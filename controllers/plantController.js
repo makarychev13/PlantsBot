@@ -25,12 +25,12 @@ async function getWateringPeriod(ctx) {
     }
 
     const plant = {
-        name: ctx.session.plantName,
+        name: ctx.session.plantName.trim().toLowerCase(),
         period: ctx.callbackQuery.data
     }
     try {
-        await Plants.savePlant(plant, ctx.from.id)
         ctx.session.plantName = null
+        await Plants.savePlant(plant, ctx.from.id)
         const isSaveUser = await Users.isUserSaveInDb(ctx.from.id)
         if (isSaveUser) {
             await ctx.reply('Растение успешно сохранено!')
@@ -40,8 +40,13 @@ async function getWateringPeriod(ctx) {
             ctx.scene.enter('set-time')
         }
     } catch (err) {
-        await ctx.reply('У нас возникли какие-то ошибки. Попробуйте ещё раз')
-        ctx.scene.enter('main-menu')
+        if (err.name === 'SequelizeUniqueConstraintError') {
+            await ctx.reply('У вас уже есть такое растение')
+            ctx.scene.reenter()
+        } else {
+            await ctx.reply('У нас возникли какие-то проблемы. Попробуйте позже')
+            ctx.scene.enter('main-menu')
+        }
     }
 }
 
@@ -54,7 +59,7 @@ async function deletePlant(ctx) {
     try {
         await Plants.deletePlant(ctx.from.id, ctx.callbackQuery.data)
         const plantsName = await Plants.getAllPlantsName(ctx.from.id)
-        const editKeyboard = plantsName.map(p => [Markup.callbackButton(p.name, p.name)])
+        const editKeyboard = plantsName.map(p => [Markup.callbackButton(p.name.charAt(0).toUpperCase() + p.name.slice(1), p.name)])
         ctx.editMessageReplyMarkup(Markup.inlineKeyboard(editKeyboard))
         if (plantsName.length !== 0) {
             ctx.reply('Растение успешно удалено')
@@ -68,8 +73,14 @@ async function deletePlant(ctx) {
     }
 }
 
+function enter(ctx) {
+    const keyboard = [['Назад']]
+    ctx.reply('Введите имя растения', Markup.keyboard(keyboard).resize().extra())
+}
+
 module.exports = {
     getPlantName,
     getWateringPeriod,
-    deletePlant
+    deletePlant,
+    enter
 }

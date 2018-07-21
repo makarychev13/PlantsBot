@@ -43,6 +43,7 @@ timeMenu.hears(/Назад/, commonController.goToMainMenu)
 timeMenu.use(timeMenuController.wrongTimeFormat)
 
 const addPlant = new Scene('add-plant')
+addPlant.enter(plantController.enter)
 addPlant.hears(/Назад/, commonController.goToMainMenu)
 addPlant.hears(/[a-z]+|[а-я]+/i, plantController.getPlantName)
 addPlant.on('callback_query', plantController.getWateringPeriod)

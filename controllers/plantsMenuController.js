@@ -9,8 +9,6 @@ function backCommand(ctx) {
 }
 
 function addPlantsCommand(ctx) {
-    const keyboard = [['Назад']]
-    ctx.reply('Введите имя растения', Markup.keyboard(keyboard).resize().extra())
     ctx.scene.enter('add-plant')
 }
 
@@ -21,7 +19,7 @@ async function deletePlantsCommand(ctx) {
         return
     }
 
-    const keyboard = plantsName.map(p => [Markup.callbackButton(p.name, p.name)])
+    const keyboard = plantsName.map(p => [Markup.callbackButton(p.name.charAt(0).toUpperCase() + p.name.slice(1), p.name)])
     ctx.reply('Какое растение хотите удалить?', Markup.inlineKeyboard(keyboard).extra())
 }
 
