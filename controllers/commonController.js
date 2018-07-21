@@ -1,5 +1,7 @@
 'use strict'
 
+const plantController = require('./plantController')
+
 function startReply(ctx) {
     ctx.scene.enter('main-menu')
 }

@@ -29,9 +29,9 @@ async function getWateringPeriod(ctx) {
         period: ctx.callbackQuery.data
     }
     try {
-        await Plants.savePlant(plant, ctx.callbackQuery.from.id)
-        ctx.session = null
-        const isSaveUser = await Users.isUserSaveInDb(ctx.callbackQuery.from.id)
+        await Plants.savePlant(plant, ctx.from.id)
+        ctx.session.plantName = null
+        const isSaveUser = await Users.isUserSaveInDb(ctx.from.id)
         if (isSaveUser) {
             await ctx.reply('Растение успешно сохранено!')
             ctx.scene.enter('main-menu')
@@ -45,7 +45,31 @@ async function getWateringPeriod(ctx) {
     }
 }
 
+async function deletePlant(ctx) {
+    ctx.telegram.answerCbQuery(ctx.callbackQuery.id)
+    if (!ctx.callbackQuery.data) {
+        return
+    }
+    
+    try {
+        await Plants.deletePlant(ctx.from.id, ctx.callbackQuery.data)
+        const plantsName = await Plants.getAllPlantsName(ctx.from.id)
+        const editKeyboard = plantsName.map(p => [Markup.callbackButton(p.name, p.name)])
+        ctx.editMessageReplyMarkup(Markup.inlineKeyboard(editKeyboard))
+        if (plantsName.length !== 0) {
+            ctx.reply('Растение успешно удалено')
+        } else {
+            await ctx.reply('Вы удалили все свои растения')
+            ctx.scene.enter('main-menu')
+        }
+    } catch(err) {
+        await ctx.reply('У нас возникли какие-то ошибки. Попробуйте ещё раз')
+        ctx.scene.enter('main-menu')
+    }
+}
+
 module.exports = {
     getPlantName,
-    getWateringPeriod
+    getWateringPeriod,
+    deletePlant
 }

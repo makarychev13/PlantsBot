@@ -12,10 +12,6 @@ function savePlant(plant, telegramId) {
 }
 
 function getAllPlantsName(telegramId) {
-    if (!telegramId) {
-        return []
-    }
-
     return Plant.findAll({
         attributes: ['name'],
         where: {
@@ -24,7 +20,17 @@ function getAllPlantsName(telegramId) {
     })
 }
 
+function deletePlant(telegramId, plantName) {
+    return Plant.destroy({
+        where: {
+            user_telegram_id: telegramId,
+            name: plantName
+        }
+    })
+}
+
 module.exports = {
     savePlant,
-    getAllPlantsName
+    getAllPlantsName,
+    deletePlant
 }
