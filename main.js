@@ -3,7 +3,7 @@
 const Telegraf = require('telegraf')
 const Scene = require('telegraf/scenes/base')
 const Stage = require('telegraf/stage')
-const session = require('telegraf/session')
+const RedisSession = require('telegraf-session-redis')
 const commonController = require('./controllers/commonController')
 const mainMenuController = require('./controllers/mainMenuController')
 const plantsMenuController = require('./controllers/plantsMenuController')
@@ -16,9 +16,15 @@ const config = require('dotenv').config()
 checkCorrectConfig(config.parsed)
 
 const stage = new Stage()
+const session = new RedisSession({
+    store: {
+        host: process.env.SESSION_HOST,
+        port: process.env.SESSION_PORT
+    }
+})
 const bot = new Telegraf(process.env.TELEGRAM_TOKEN)
 bot.catch(err => console.log(err))
-bot.use(session())
+bot.use(session.middleware())
 bot.use(stage.middleware())
 bot.start(commonController.startReply)
 bot.startPolling()

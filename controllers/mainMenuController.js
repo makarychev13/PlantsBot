@@ -22,7 +22,7 @@ async function myPlantsCommand(ctx) {
         message = 'Список ваших растений пуст. Что хотите сделать?'
         keyboard = [['Добавить растения'], ['Назад']]
     }
-    await ctx.reply(message, Markup.keyboard(keyboard).resize().oneTime().extra())
+    await ctx.reply(message, Markup.keyboard(keyboard).resize().extra())
     ctx.scene.enter('plants-menu')
 }
 
