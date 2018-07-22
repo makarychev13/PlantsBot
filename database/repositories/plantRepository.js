@@ -29,8 +29,21 @@ function deletePlant(telegramId, plantName) {
     })
 }
 
+async function getWateringPeriod(plantName, telegramId) {
+    const plant = await Plant.find({
+        attributes: ['period'],
+        where: {
+            name: plantName,
+            user_telegram_id: telegramId
+        }
+    })
+
+    return plant ? plant.period : null
+}
+
 module.exports = {
     savePlant,
     getAllPlantsName,
-    deletePlant
+    deletePlant,
+    getWateringPeriod
 }

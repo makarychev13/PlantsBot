@@ -17,12 +17,12 @@ async function myPlantsCommand(ctx) {
     if (plants.length !== 0) {
         const plantsNameList = plants.map(p => p.name.charAt(0).toUpperCase() + p.name.slice(1)).join("\n")
         message = `Список ваших растений:\n${plantsNameList}\n\nЧто хотите сделать?`
-        keyboard = [['Добавить растения'], ['Удалить растения'], ['Изменить время полива'], ['Назад']]
+        keyboard = [['Добавить растения'], ['Удалить растения'], ['Назад']]
     } else {
         message = 'Список ваших растений пуст. Что хотите сделать?'
         keyboard = [['Добавить растения'], ['Назад']]
     }
-    await ctx.reply(message, Markup.keyboard(keyboard).resize().extra())
+    await ctx.reply(message, Markup.keyboard(keyboard).resize().oneTime().extra())
     ctx.scene.enter('plants-menu')
 }
 

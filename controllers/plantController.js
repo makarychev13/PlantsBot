@@ -5,6 +5,11 @@ const Plants = require('../database/repositories/plantRepository')
 const Users = require('../database/repositories/userRepository')
 
 function getPlantName(ctx) {
+    if (ctx.session.plantName) {
+        ctx.reply('Неверный формат. Чтобы выбрать периодичность полива, нажмите на одну из кнопок выше')
+        return
+    }
+
     ctx.session.plantName = ctx.message.text
     const keyboard = [
         [Markup.callbackButton('Каждый день', '1')],
@@ -41,8 +46,8 @@ async function getWateringPeriod(ctx) {
         }
     } catch (err) {
         if (err.name === 'SequelizeUniqueConstraintError') {
-            await ctx.reply('У вас уже есть такое растение')
-            ctx.scene.reenter()
+            const keyboard = [['Назад']]
+            await ctx.reply('У вас уже есть такое растение. Введите другое имя растения или вернитесь в главное меню', Markup.keyboard(keyboard).resize().extra())
         } else {
             await ctx.reply('У нас возникли какие-то проблемы. Попробуйте позже')
             ctx.scene.enter('main-menu')
@@ -73,14 +78,8 @@ async function deletePlant(ctx) {
     }
 }
 
-function enter(ctx) {
-    const keyboard = [['Назад']]
-    ctx.reply('Введите имя растения', Markup.keyboard(keyboard).resize().extra())
-}
-
 module.exports = {
     getPlantName,
     getWateringPeriod,
-    deletePlant,
-    enter
+    deletePlant
 }

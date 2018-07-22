@@ -4,12 +4,13 @@ const Markup = require('telegraf/markup')
 const Plants = require('../database/repositories/plantRepository')
 
 function backCommand(ctx) {
-    ctx.scene.leave()
     ctx.scene.enter('main-menu')
 }
 
 function addPlantsCommand(ctx) {
-    ctx.scene.enter('add-plant')
+    const keyboard = [['Назад']]
+    ctx.reply('Введите имя растения', Markup.keyboard(keyboard).resize().extra())
+    ctx.scene.enter('plants')
 }
 
 async function deletePlantsCommand(ctx) {

@@ -1,13 +1,11 @@
 'use strict'
 
-const plantController = require('./plantController')
-
 function startReply(ctx) {
     ctx.scene.enter('main-menu')
 }
 
 function errorCommand(ctx) {
-    ctx.reply(`Вы ошиблись`)
+    ctx.reply('Нет такой команды. Выберите один из пунктов меню.')
 }
 
 function goToMainMenu(ctx) {
