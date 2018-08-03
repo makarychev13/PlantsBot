@@ -34,10 +34,12 @@ async function getTimezone(ctx) {
         } else if (hour < 0) {
             hour += 24
         }
-        await Users.saveUser({
+        await Users.saveOrUpdateUser({
             telegramId: ctx.message.from.id,
-            time: `${hour}:${minute}`
+            time: `${hour}:${minute}`,
+            userTime: timeNotify
         })
+        ctx.session.timeNotify = null
         await ctx.reply('Часовой пояс успешно сохранён!')
         await ctx.scene.enter('main-menu')
     } catch (err) {

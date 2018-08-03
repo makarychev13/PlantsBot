@@ -45,7 +45,7 @@ plantsMenu.use(commonController.errorCommand)
 const timeMenu = new Scene('time-menu')
 timeMenu.hears(/Настроить время уведомления/, timeMenuController.goToSetTime)
 timeMenu.hears(/Назад/, commonController.goToMainMenu)
-timeMenu.use(timeMenuController.wrongTimeFormat)
+timeMenu.use(commonController.errorCommand)
 
 const plants = new Scene('plants')
 plants.enter(plantController.enter)

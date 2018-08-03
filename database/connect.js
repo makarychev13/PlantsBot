@@ -13,7 +13,7 @@ const connect = new Sequelize(process.env.DB_DATABASE, process.env.DB_USER, proc
         min: 0,
         acquire: 30000,
         idle: 10000
-    },
+    }
 })
 
 connect.authenticate()

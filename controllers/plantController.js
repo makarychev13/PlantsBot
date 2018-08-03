@@ -30,7 +30,7 @@ async function getWateringPeriod(ctx) {
     }
 
     const plant = {
-        name: ctx.session.plantName.trim().toLowerCase(),
+        name: ctx.session.plantName.replace(/ /g, '').toLowerCase(),
         period: ctx.callbackQuery.data
     }
     try {

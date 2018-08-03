@@ -29,7 +29,7 @@ async function myPlantsCommand(ctx) {
 async function timeSettingsCommand(ctx) {
     try {
         const telegramId = ctx.message.from.id
-        const time = await Users.getTimeByTelegramId(telegramId)
+        const time = await Users.getUserTimeByTelegramId(telegramId)
         let message = time ? `Вы получаете уведомления в ${time}. Что хотите сделать?`
                            : 'У вас не настроено время уведомления. Хотите настроить его?' 
         const keyboard = [['Настроить время уведомления'], ['Назад']]

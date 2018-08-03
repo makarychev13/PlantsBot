@@ -28,7 +28,7 @@ const Plant = connect.define('plants', {
     }
 })
 
-Plant.sync().catch(err => consol.err(`Не удалось создать таблицу plants: ${err}`))
+Plant.sync({ force: false }).catch(err => console.err(`Не удалось создать таблицу plants: ${err}`))
 
 module.exports = {
     Plant

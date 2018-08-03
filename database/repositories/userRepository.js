@@ -2,19 +2,19 @@
 
 const { User } = require('../models/users')
 
-async function getTimeByTelegramId(telegramId) {
+async function getUserTimeByTelegramId(telegramId) {
     if (!telegramId) {
         return null
     }
     
     const user = await User.findAll({
-        attributes: ['notification_time'],
+        attributes: ['user_time'],
         where: {
             telegram_id: telegramId
         }
     })
 
-    return user.length !== 0 ? user[0].notification_time : null
+    return user.length !== 0 ? user[0].user_time : null
 }
 
 async function isUserSaveInDb(telegramId) {
@@ -28,15 +28,16 @@ async function isUserSaveInDb(telegramId) {
     return user.length !== 0 ? true : false
 }
 
-function saveUser(user) {
-    return User.create({
+function saveOrUpdateUser(user) {
+    return User.upsert({
         telegram_id: user.telegramId,
-        notification_time: user.time
+        notification_time: user.time,
+        user_time: user.userTime
     })
 }
 
 module.exports = {
-    getTimeByTelegramId,
-    saveUser,
+    getUserTimeByTelegramId,
+    saveOrUpdateUser,
     isUserSaveInDb
 }
