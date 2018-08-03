@@ -10,10 +10,7 @@ const plantsMenuController = require('./controllers/plantsMenuController')
 const timeMenuController = require('./controllers/timeMenuController')
 const plantController = require('./controllers/plantController')
 const setTimeController = require('./controllers/setTimeController')
-const { checkCorrectConfig } = require('./config/checkCorrectConfig')
-const config = require('dotenv').config()
-
-checkCorrectConfig(config.parsed)
+require('dotenv').config()
 
 const stage = new Stage()
 const session = new RedisSession({

@@ -28,9 +28,11 @@ const User = connect.define('users', {
             len: [3,5]
         }
     }
+}, {
+    timestamps: false
 })
 
-User.sync({ force: false }).catch(err => console.err(`Не удалось создать таблицу users: ${err}`))
+User.sync({ force: true }).catch(err => console.err(`Не удалось создать таблицу users: ${err}`))
 
 module.exports = {
     User

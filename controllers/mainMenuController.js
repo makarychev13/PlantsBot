@@ -1,12 +1,11 @@
 'use strict'
 
-const messages = require('../data/message.json')
 const Users = require('../database/repositories/userRepository')
 const Plants = require('../database/repositories/plantRepository')
 const { mainMenuKeyboard, plantMenuFullKeyboard, plantMenuCutKeyboard, timeSettingsKeyboard } = require('../data/keyboard')
 
 function enter(ctx) {
-    ctx.reply(messages.start, mainMenuKeyboard)
+    ctx.reply('Чтобы настроить уведомления о поливе ваших растений, выберите один из пунктов меню.', mainMenuKeyboard)
 }
 
 async function myPlantsCommand(ctx) {
