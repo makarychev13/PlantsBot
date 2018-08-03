@@ -1,13 +1,12 @@
 'use strict'
 
-const Markup = require('telegraf/markup')
 const messages = require('../data/message.json')
 const Users = require('../database/repositories/userRepository')
 const Plants = require('../database/repositories/plantRepository')
+const { mainMenuKeyboard, plantMenuFullKeyboard, plantMenuCutKeyboard, timeSettingsKeyboard } = require('../data/keyboard')
 
 function enter(ctx) {
-    const keyboard = [['Мои растения'], ['Время уведомления']]
-    ctx.reply(messages.start, Markup.keyboard(keyboard).resize().extra())
+    ctx.reply(messages.start, mainMenuKeyboard)
 }
 
 async function myPlantsCommand(ctx) {
@@ -17,12 +16,12 @@ async function myPlantsCommand(ctx) {
     if (plants.length !== 0) {
         const plantsNameList = plants.map(p => p.name.charAt(0).toUpperCase() + p.name.slice(1)).join("\n")
         message = `Список ваших растений:\n${plantsNameList}\n\nЧто хотите сделать?`
-        keyboard = [['Добавить растения'], ['Удалить растения'], ['Назад']]
+        keyboard = plantMenuFullKeyboard
     } else {
         message = 'Список ваших растений пуст. Что хотите сделать?'
-        keyboard = [['Добавить растения'], ['Назад']]
+        keyboard = plantMenuCutKeyboard
     }
-    await ctx.reply(message, Markup.keyboard(keyboard).resize().extra())
+    await ctx.reply(message, keyboard)
     ctx.scene.enter('plants-menu')
 }
 
@@ -32,8 +31,7 @@ async function timeSettingsCommand(ctx) {
         const time = await Users.getUserTimeByTelegramId(telegramId)
         let message = time ? `Вы получаете уведомления в ${time}. Что хотите сделать?`
                            : 'У вас не настроено время уведомления. Хотите настроить его?' 
-        const keyboard = [['Настроить время уведомления'], ['Назад']]
-        await ctx.reply(message, Markup.keyboard(keyboard).resize().extra())
+        await ctx.reply(message, timeSettingsKeyboard)
         ctx.scene.enter('time-menu')
     } catch (err) {
         await ctx.reply('У нас возникли проблемы. Попробуйте ещё раз')

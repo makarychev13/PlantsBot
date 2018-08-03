@@ -3,6 +3,7 @@
 const Markup = require('telegraf/markup')
 const Plants = require('../database/repositories/plantRepository')
 const Users = require('../database/repositories/userRepository')
+const { plantPeriodsKeyboard, goBackKeyboard } = require('../data/keyboard')
 
 function getPlantName(ctx) {
     if (ctx.session.plantName) {
@@ -10,17 +11,8 @@ function getPlantName(ctx) {
         return
     }
 
-    ctx.session.plantName = ctx.message.text
-    const keyboard = [
-        [Markup.callbackButton('Каждый день', '1')],
-        [Markup.callbackButton('Каждые 2 дня', '2')],
-        [Markup.callbackButton('Каждые 3 дня', '3')],
-        [Markup.callbackButton('Каждые 5 дней', '5')],
-        [Markup.callbackButton('Каждую неделю', '7')],
-        [Markup.callbackButton('Каждые 2 недели', '14')],
-        [Markup.callbackButton('Каждый месяц', '30')]
-    ]    
-    ctx.reply('Как часто его нужно поливать?', Markup.inlineKeyboard(keyboard).extra())
+    ctx.session.plantName = ctx.message.text    
+    ctx.reply('Как часто его нужно поливать?', plantPeriodsKeyboard)
 }
 
 async function getWateringPeriod(ctx) {
@@ -46,8 +38,7 @@ async function getWateringPeriod(ctx) {
         }
     } catch (err) {
         if (err.name === 'SequelizeUniqueConstraintError') {
-            const keyboard = [['Назад']]
-            await ctx.reply('У вас уже есть такое растение. Введите другое имя растения или вернитесь в главное меню', Markup.keyboard(keyboard).resize().extra())
+            await ctx.reply('У вас уже есть такое растение. Введите другое имя растения или вернитесь в главное меню', goBackKeyboard)
         } else {
             await ctx.reply('У нас возникли какие-то проблемы. Попробуйте позже')
             ctx.scene.enter('main-menu')
