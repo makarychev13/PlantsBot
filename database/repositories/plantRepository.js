@@ -29,8 +29,17 @@ function deletePlant(telegramId, plantName) {
     })
 }
 
+function getPlantsForWatering(date) {
+    return Plant.findAll({
+        where: {
+            last_watering_date: date
+        }
+    })
+}
+
 module.exports = {
     savePlant,
     getAllPlantsName,
-    deletePlant
+    deletePlant,
+    getPlantsForWatering
 }

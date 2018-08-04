@@ -14,7 +14,7 @@ const Plant = connect.define('plants', {
         allowNull: false
     },
     last_watering_date: {
-        type: Sequelize.DATE,
+        type: Sequelize.DATEONLY,
         allowNull: false
     },
     name: {
@@ -23,14 +23,14 @@ const Plant = connect.define('plants', {
         allowNull: false
     },
     period: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.INTEGER({ length: 2 }),
         allowNull: false
     }
 }, {
     timestamps: false
 })
 
-Plant.sync({ force: true }).catch(err => console.err(`Не удалось создать таблицу plants: ${err}`))
+Plant.sync({ force: false }).catch(err => console.err(`Не удалось создать таблицу plants: ${err}`))
 
 module.exports = {
     Plant
