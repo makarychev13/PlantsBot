@@ -1,7 +1,6 @@
 'use strict'
 
 const { User } = require('../models/users')
-const { getPlantsForWatering } = require('./plantRepository')
 const options = require('sequelize').Op
 
 async function getUserTimeByTelegramId(telegramId) {
@@ -45,31 +44,9 @@ function getNotificationTime(telegramIdList) {
     })
 }
 
-async function getDataForNotification(date) {
-    const plantsForWatering = await getPlantsForWatering(date);
-    let telegramIds = plantsForWatering.map(plant => plant.user_telegram_id)
-    telegramIds = telegramIds.filter((id, index) => telegramIds.indexOf(id) == index)                               
-    const notificationTimes = await getNotificationTime(telegramIds)
-
-    const dataForCron = []
-    for (const notificationTime of notificationTimes) {
-        const userPlants = plantsForWatering.filter(plant => plant.user_telegram_id === notificationTime.telegram_id)
-        for (const plant of userPlants) {
-            dataForCron.push({
-                id: notificationTime.telegram_id,
-                plantName: plant.name,
-                time: notificationTime.notification_time
-            })
-        }
-    }
-
-    return dataForCron
-}
-
 module.exports = {
     getUserTimeByTelegramId,
     saveOrUpdateUser,
     isUserSaveInDb,
-    getNotificationTime,
-    getDataForNotification
+    getNotificationTime
 }

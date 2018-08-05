@@ -10,7 +10,10 @@ const plantsMenuController = require('./controllers/plantsMenuController')
 const timeMenuController = require('./controllers/timeMenuController')
 const plantController = require('./controllers/plantController')
 const setTimeController = require('./controllers/setTimeController')
+const { mainTimer } = require('./notifications/mainTimer')
 require('dotenv').config()
+
+mainTimer()
 
 const stage = new Stage()
 const session = new RedisSession({
