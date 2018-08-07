@@ -2,7 +2,7 @@
 
 const Markup = require('telegraf/markup')
 const Plants = require('../database/repositories/plantRepository')
-const { goBackKeyboard } = require('../data/keyboard')
+const { goBackKeyboard } = require('../keyboard/index')
 
 function backCommand(ctx) {
     ctx.scene.enter('main-menu')

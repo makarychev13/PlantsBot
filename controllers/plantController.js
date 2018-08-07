@@ -3,7 +3,7 @@
 const Markup = require('telegraf/markup')
 const Plants = require('../database/repositories/plantRepository')
 const Users = require('../database/repositories/userRepository')
-const { plantPeriodsKeyboard, goBackKeyboard } = require('../data/keyboard')
+const { plantPeriodsKeyboard, goBackKeyboard } = require('../keyboard/index')
 
 function getPlantName(ctx) {
     if (ctx.session.plantName) {

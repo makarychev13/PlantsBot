@@ -2,7 +2,7 @@
 
 const Users = require('../database/repositories/userRepository')
 const Plants = require('../database/repositories/plantRepository')
-const { mainMenuKeyboard, plantMenuFullKeyboard, plantMenuCutKeyboard, timeSettingsKeyboard } = require('../data/keyboard')
+const { mainMenuKeyboard, plantMenuFullKeyboard, plantMenuCutKeyboard, timeSettingsKeyboard } = require('../keyboard/index')
 
 function enter(ctx) {
     ctx.reply('Чтобы настроить уведомления о поливе ваших растений, выберите один из пунктов меню.', mainMenuKeyboard)
