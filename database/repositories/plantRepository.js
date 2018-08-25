@@ -1,8 +1,6 @@
 'use strict'
 
 const { Plant } = require('../models/plants')
-const { SELECT } = require('sequelize')
-const { connect } = require('../connect')
 const { fn, col } = require('sequelize')
 
 function savePlant(plant, telegramId) {

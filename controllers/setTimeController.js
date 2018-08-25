@@ -2,22 +2,26 @@
 
 const { geo } = require('../geo/index')
 const { transliterate } = require('../geo/translit')
+const { goBackKeyboard } = require('../keyboard/index')
 const Users = require('../database/repositories/userRepository')
 
 function enter(ctx) {
-    ctx.reply('Когда вы хотите получать уведомления?')
+    ctx.reply('Во сколько вы хотите получать уведомления?', goBackKeyboard)
 }
 
 function getTimeNotify(ctx) {
-    const textFromMessage = ctx.message.text
-    const time = textFromMessage.length > 5 ? textFromMessage.substr(0, 5) : textFromMessage
-    ctx.session.timeNotify = time
+    if (_getHourInt(ctx.message.text) > 24 || _getMinuteInt(ctx.message.text) > 59) {
+        ctx.reply('Неправильный формат данных. Введите время в формате ЧЧ:ММ. Например, 12:30 или 16:00')
+        return
+    }
+
+    ctx.session.timeNotify = ctx.message.text
     ctx.reply('Введите город, в котором вы живёте, чтобы я определил часовой пояс')
 }
 
 async function getTimezone(ctx) {
     if (!ctx.session.timeNotify) {
-        ctx.reply('Неправильное время!')
+        ctx.reply('Неправильный формат данных. Введите время в формате ЧЧ:ММ. Например, 12:30 или 16:00')
         return
     }
 
@@ -25,9 +29,8 @@ async function getTimezone(ctx) {
         const translitCity = transliterate(ctx.message.text)
         const timeZone = await geo.getTimeZoneByString(translitCity.toLowerCase())
         const timeNotify = ctx.session.timeNotify
-        const indexOfColon = timeNotify.indexOf(':')
-        const minute = parseInt(timeNotify.substr(indexOfColon + 1, 2))
-        let hour = parseInt(timeNotify.substr(0, indexOfColon)) 
+        const minute = _getMinuteInt(timeNotify)
+        let hour = _getHourInt(timeNotify)
         hour -= timeZone
         if (hour >= 24) {
             hour -= 24
@@ -45,6 +48,20 @@ async function getTimezone(ctx) {
     } catch (err) {
         ctx.reply('Не удалось узнать часовой пояс. Попробуйте ещё')
     }
+}
+
+function _getHourInt(timeString) {
+    const indexOfColon = timeString.indexOf(':')
+    const hour = parseInt(timeString.substr(0, indexOfColon))
+
+    return hour
+}
+
+function _getMinuteInt(timeString) {
+    const indexOfColon = timeString.indexOf(':')
+    const minute = parseInt(timeString.substr(indexOfColon + 1, 2))
+
+    return minute
 }
 
 module.exports = {

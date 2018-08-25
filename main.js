@@ -18,12 +18,12 @@ mainTimer()
 const stage = new Stage()
 const session = new RedisSession({
     store: {
-        host: process.env.SESSION_HOST,
-        port: process.env.SESSION_PORT
+        host: process.env.SESSION_HOST || '127.0.0.1',
+        port: process.env.SESSION_PORT || 6379
     }
 })
 const bot = new Telegraf(process.env.TELEGRAM_TOKEN)
-bot.catch(err => console.log(err))
+bot.catch(err => console.log(`Необработанная ошибка: ${err}`))
 bot.use(session.middleware())
 bot.use(stage.middleware())
 bot.start(commonController.startReply)
@@ -56,8 +56,7 @@ plants.on('callback_query', plantController.getWateringPeriod)
 const setTime = new Scene('set-time')
 setTime.enter(setTimeController.enter)
 setTime.hears(/[\d]+:\d\d/, setTimeController.getTimeNotify)
+setTime.hears(/Назад/, commonController.goToMainMenu)
 setTime.use(setTimeController.getTimezone)
 
 stage.register(mainMenu, plantsMenu, timeMenu, plants, setTime)
-
-console.log('PlantsBot успешно запущен')

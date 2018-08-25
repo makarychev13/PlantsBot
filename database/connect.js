@@ -16,9 +16,7 @@ const connect = new Sequelize(process.env.DB_DATABASE, process.env.DB_USER, proc
     }
 })
 
-connect.authenticate()
-       .then(() => console.log('Подключение к БД установлено'))
-       .catch(err => console.log(`Не удалось подключиться к БД: ${err}`))
+connect.authenticate().catch(err => console.log(`Не удалось подключиться к БД: ${err}`))
 
 module.exports = {
     connect
