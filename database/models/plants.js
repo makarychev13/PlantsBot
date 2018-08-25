@@ -26,9 +26,7 @@ const Plant = connect.define('plants', {
         type: Sequelize.INTEGER({ length: 2 }),
         allowNull: false
     }
-}, { timestamps: false,
-     charset: 'utf8',
-     collate: 'utf8_unicode_ci'})
+}, { timestamps: false })
 
 Plant.sync({ force: false }).catch(err => console.err(`Не удалось создать таблицу plants: ${err}`))
 
