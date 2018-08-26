@@ -4,9 +4,10 @@ const { Plant } = require('../models/plants')
 const { fn, col } = require('sequelize')
 
 function savePlant(plant, telegramId) {
+    const now = new Date()
     return Plant.create({
         name: plant.name,
-        last_watering_date: new Date(),
+        last_watering_date: now.setDate(now.getDate() + parseInt(plant.period)),
         period: plant.period,
         user_telegram_id: telegramId
     })
@@ -43,9 +44,10 @@ function updateWateringDate(plantName, telegramId) {
         last_watering_date: fn('ADDDATE', col('last_watering_date'), col('period'))
     }, 
     { 
-        where: {
-            user_telegram_id: telegramId,
-            name: plantName}
+        where: { 
+            user_telegram_id: telegramId,     
+            name: plantName 
+        }
     })
 }
 

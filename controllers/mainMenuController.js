@@ -2,7 +2,10 @@
 
 const Users = require('../database/repositories/userRepository')
 const Plants = require('../database/repositories/plantRepository')
+const { loggerFactory } = require('../logger/index')
 const { mainMenuKeyboard, plantMenuFullKeyboard, plantMenuCutKeyboard, timeSettingsKeyboard } = require('../keyboard/index')
+
+const logger = loggerFactory('mainMenu')
 
 function enter(ctx) {
     ctx.reply('Чтобы настроить уведомления о поливе ваших растений, выберите один из пунктов меню.', mainMenuKeyboard)
@@ -33,6 +36,7 @@ async function timeSettingsCommand(ctx) {
         await ctx.reply(message, timeSettingsKeyboard)
         ctx.scene.enter('time-menu')
     } catch (err) {
+        logger.log('error', `Не удалось узнать время уведомления: ${err}`)
         await ctx.reply('У нас возникли проблемы. Попробуйте ещё раз')
         ctx.scene.enter('main-menu')
     }

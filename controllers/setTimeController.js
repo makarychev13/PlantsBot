@@ -3,7 +3,10 @@
 const { geo } = require('../geo/index')
 const { transliterate } = require('../geo/translit')
 const { goBackKeyboard } = require('../keyboard/index')
+const { loggerFactory } = require('../logger/index')
 const Users = require('../database/repositories/userRepository')
+
+const logger = loggerFactory('setTime')
 
 function enter(ctx) {
     ctx.reply('Во сколько вы хотите получать уведомления?', goBackKeyboard)
@@ -46,6 +49,7 @@ async function getTimezone(ctx) {
         await ctx.reply('Часовой пояс успешно сохранён!')
         await ctx.scene.enter('main-menu')
     } catch (err) {
+        logger.log('error', `Не удалось узнать часовой пояс: ${err}`)
         ctx.reply('Не удалось узнать часовой пояс. Попробуйте ещё')
     }
 }

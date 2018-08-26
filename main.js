@@ -60,3 +60,4 @@ setTime.hears(/Назад/, commonController.goToMainMenu)
 setTime.use(setTimeController.getTimezone)
 
 stage.register(mainMenu, plantsMenu, timeMenu, plants, setTime)
+console.log('PlantsBot успешно запущен')

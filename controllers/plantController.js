@@ -3,7 +3,10 @@
 const Markup = require('telegraf/markup')
 const Plants = require('../database/repositories/plantRepository')
 const Users = require('../database/repositories/userRepository')
+const { loggerFactory } = require('../logger/index')
 const { plantPeriodsKeyboard, goBackKeyboard } = require('../keyboard/index')
+
+const logger = loggerFactory('plant')
 
 function getPlantName(ctx) {
     if (ctx.session.plantName) {
@@ -40,6 +43,7 @@ async function getWateringPeriod(ctx) {
         if (err.name === 'SequelizeUniqueConstraintError') {
             await ctx.reply('У вас уже есть такое растение. Введите другое имя растения или вернитесь в главное меню', goBackKeyboard)
         } else {
+            logger.log('error', `Не удалось сохранить растение: ${err}`)
             await ctx.reply('У нас возникли какие-то проблемы. Попробуйте позже')
             ctx.scene.enter('main-menu')
         }
