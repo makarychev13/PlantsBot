@@ -1,7 +1,6 @@
 'use strict'
 
-const { geo } = require('../geo/index')
-const { transliterate } = require('../geo/translit')
+const { getTimeZoneByString } = require('../geo/index')
 const { goBackKeyboard } = require('../keyboard/index')
 const { loggerFactory } = require('../logger/index')
 const Users = require('../database/repositories/userRepository')
@@ -29,8 +28,7 @@ async function getTimezone(ctx) {
     }
 
     try {
-        const translitCity = transliterate(ctx.message.text)
-        const timeZone = await geo.getTimeZoneByString(translitCity.toLowerCase())
+        const timeZone = await getTimeZoneByString(ctx.message.text)
         const timeNotify = ctx.session.timeNotify
         const minute = _getMinuteInt(timeNotify)
         let hour = _getHourInt(timeNotify)
