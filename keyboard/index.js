@@ -16,6 +16,7 @@ const plantPeriodsKeyboard = Markup.inlineKeyboard([
     [Markup.callbackButton('Каждый месяц', '30')]
 ]).extra()
 const goBackKeyboard = Markup.keyboard([['Назад']]).resize().extra()
+const finalAddPlantKeyboard = Markup.keyboard([['В главное меню'], ['Добавить ещё растение']]).resize().extra()
 
 module.exports = {
     mainMenuKeyboard,
@@ -23,5 +24,6 @@ module.exports = {
     plantMenuCutKeyboard,
     timeSettingsKeyboard,
     plantPeriodsKeyboard,
-    goBackKeyboard
+    goBackKeyboard,
+    finalAddPlantKeyboard
 }

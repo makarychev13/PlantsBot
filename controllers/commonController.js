@@ -9,8 +9,9 @@ function errorCommand(ctx) {
 }
 
 function goToMainMenu(ctx) {
-    if (ctx.session && ctx.session.timeNotify) {
+    if (ctx.session) {
         ctx.session.timeNotify = null
+        ctx.session.dontCheck = null
     }
     ctx.scene.enter('main-menu')
 }

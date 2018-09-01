@@ -50,6 +50,8 @@ timeMenu.use(commonController.errorCommand)
 const plants = new Scene('plants')
 plants.enter(plantController.enter)
 plants.hears(/Назад/, commonController.goToMainMenu)
+plants.hears(/В главное меню/, commonController.goToMainMenu)
+plants.hears(/Добавить ещё растение/, plantsMenuController.addPlantsCommand)
 plants.hears(/[a-z]+|[а-я]+/i, plantController.getPlantName)
 plants.on('callback_query', plantController.getWateringPeriod)
 

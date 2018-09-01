@@ -4,13 +4,16 @@ const Markup = require('telegraf/markup')
 const Plants = require('../database/repositories/plantRepository')
 const Users = require('../database/repositories/userRepository')
 const { loggerFactory } = require('../logger/index')
-const { plantPeriodsKeyboard, goBackKeyboard } = require('../keyboard/index')
+const { plantPeriodsKeyboard, goBackKeyboard, finalAddPlantKeyboard } = require('../keyboard/index')
 
 const logger = loggerFactory('plant')
 
 function getPlantName(ctx) {
     if (ctx.session.plantName) {
         ctx.reply('Неверный формат. Чтобы выбрать периодичность полива, нажмите на одну из кнопок выше')
+        return
+    } else if (ctx.session.dontCheck) {
+        ctx.reply('Неверный формат. Выберите один из пунктов меню на клавиатуре')
         return
     }
 
@@ -33,8 +36,8 @@ async function getWateringPeriod(ctx) {
         await Plants.savePlant(plant, ctx.from.id)
         const isSaveUser = await Users.isUserSaveInDb(ctx.from.id)
         if (isSaveUser) {
-            await ctx.reply('Растение успешно сохранено!')
-            ctx.scene.enter('main-menu')
+            ctx.session.dontCheck = true
+            await ctx.reply('Растение успешно сохранено! Что хотите сделать?', finalAddPlantKeyboard)
         } else {
             await ctx.reply('Растение успешно сохранено! Но у вас не настроено время уведомления')
             ctx.scene.enter('set-time')
@@ -68,6 +71,7 @@ async function deletePlant(ctx) {
             ctx.scene.enter('main-menu')
         }
     } catch(err) {
+        logger.log('error', `Не удалось удалить растение растение: ${err}`)
         await ctx.reply('У нас возникли какие-то ошибки. Попробуйте ещё раз')
         ctx.scene.enter('main-menu')
     }

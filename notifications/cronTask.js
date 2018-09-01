@@ -2,7 +2,7 @@
 
 const { CronJob } = require('cron')
 
-function createTask(timeString, cronCallback, runOnInit = true, cronCompleteCallback = null) {
+function createTask(timeString, cronCallback, runOnInit = true, cronCompleteCallback = null, stop = false) {
     const indexOfColon = timeString.indexOf(':')
     const minute = parseInt(timeString.substr(indexOfColon + 1, 2))
     let hour = parseInt(timeString.substr(0, indexOfColon))
@@ -11,7 +11,9 @@ function createTask(timeString, cronCallback, runOnInit = true, cronCompleteCall
         cronTime: time,
         onTick: function() {
             cronCallback()
-            this.stop()
+            if (stop) {
+                this.stop()
+            }
         },
         onComplete: () => {
             if (cronCompleteCallback) {
