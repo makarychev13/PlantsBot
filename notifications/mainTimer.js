@@ -15,8 +15,7 @@ function mainTimer() {
             createTask(notification.time, 
                        async () => await telegram.sendMessage(notification.id, `Не забудьте полить ${notification.plantName}`), 
                        false, 
-                       async () => await updateWateringDate(notification.plantName, notification.id),
-                       true)
+                       async () => await updateWateringDate(notification.plantName, notification.id))
         }
     })
 }
