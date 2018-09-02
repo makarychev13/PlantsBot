@@ -9,6 +9,7 @@ function backCommand(ctx) {
 }
 
 function addPlantsCommand(ctx) {
+    ctx.session.dontCheck = null
     ctx.reply('Введите имя растения', goBackKeyboard)
     ctx.scene.enter('plants')
 }
