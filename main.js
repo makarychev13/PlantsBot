@@ -32,7 +32,7 @@ bot.startPolling()
 const mainMenu = new Scene('main-menu')
 mainMenu.enter(mainMenuController.enter)
 mainMenu.hears(/Мои растения/, mainMenuController.myPlantsCommand)
-mainMenu.hears(/Время уведомления/, mainMenuController.timeSettingsCommand)
+mainMenu.hears(/Настройки уведомлений/, mainMenuController.timeSettingsCommand)
 mainMenu.use(commonController.errorCommand)
 
 const plantsMenu = new Scene('plants-menu')
@@ -44,6 +44,8 @@ plantsMenu.use(commonController.errorCommand)
 
 const timeMenu = new Scene('time-menu')
 timeMenu.hears(/Настроить время уведомления/, timeMenuController.goToSetTime)
+timeMenu.hears(/Отписаться/, timeMenuController.unsubUser)
+timeMenu.hears(/Подписаться/, timeMenuController.subUser)
 timeMenu.hears(/Назад/, commonController.goToMainMenu)
 timeMenu.use(commonController.errorCommand)
 

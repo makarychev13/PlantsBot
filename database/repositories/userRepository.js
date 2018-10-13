@@ -5,13 +5,13 @@ const options = require('sequelize').Op
 
 async function getUserTimeByTelegramId(telegramId) {
     const user = await User.findAll({
-        attributes: ['user_time'],
+        attributes: ['user_time', 'mute'],
         where: {
             telegram_id: telegramId
         }
     })
 
-    return user.length !== 0 ? user[0].user_time : null
+    return user.length !== 0 ? user[0] : null
 }
 
 async function isUserSaveInDb(telegramId) {
@@ -39,7 +39,30 @@ function getNotificationTime(telegramIdList) {
         where: {
             telegram_id: {
                 [options.or]: telegramIdList
-            }
+            },
+            mute: false
+        }
+    })
+}
+
+function muteUser(telegramId) {
+    return User.update({
+        mute: true 
+    }, 
+    {
+        where: {
+            telegram_id: telegramId
+        }
+    })
+}
+
+function unmuteUser(telegramId) {
+    return User.update({
+        mute: false 
+    }, 
+    { 
+        where: {
+            telegram_id: telegramId
         }
     })
 }
@@ -48,5 +71,7 @@ module.exports = {
     getUserTimeByTelegramId,
     saveOrUpdateUser,
     isUserSaveInDb,
-    getNotificationTime
+    getNotificationTime,
+    muteUser,
+    unmuteUser
 }

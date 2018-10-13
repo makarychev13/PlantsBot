@@ -14,6 +14,11 @@ const User = connect.define('users', {
         unique: true,
         allowNull: false
     },
+    mute: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+    },
     notification_time: {
         type: Sequelize.STRING,
         allowNull: false,

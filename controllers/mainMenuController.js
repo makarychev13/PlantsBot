@@ -3,7 +3,7 @@
 const Users = require('../database/repositories/userRepository')
 const Plants = require('../database/repositories/plantRepository')
 const { loggerFactory } = require('../logger/index')
-const { mainMenuKeyboard, plantMenuFullKeyboard, plantMenuCutKeyboard, timeSettingsKeyboard } = require('../keyboard/index')
+const { mainMenuKeyboard, plantMenuFullKeyboard, plantMenuCutKeyboard, timeSettingsKeyboardSub, timeSettingsKeyboardUnsub } = require('../keyboard/index')
 
 const logger = loggerFactory('mainMenu')
 
@@ -30,10 +30,19 @@ async function myPlantsCommand(ctx) {
 async function timeSettingsCommand(ctx) {
     try {
         const telegramId = ctx.message.from.id
-        const time = await Users.getUserTimeByTelegramId(telegramId)
-        let message = time ? `Вы получаете уведомления в ${time}. Что хотите сделать?`
-                           : 'У вас не настроено время уведомления. Хотите настроить его?' 
-        await ctx.reply(message, timeSettingsKeyboard)
+        const userSubInfo = await Users.getUserTimeByTelegramId(telegramId)
+        let message, keyboard
+        if (userSubInfo && userSubInfo.mute && userSubInfo.user_time) {
+            message = `Вы отписаны от уведомлений. Нажмите на кнопку "Подписаться", чтобы возобновить получение уведомлений в ${userSubInfo.user_time}`
+            keyboard = timeSettingsKeyboardSub
+        } else if (userSubInfo && !userSubInfo.mute && userSubInfo.user_time) {
+            message = `Вы получаете уведомления в ${userSubInfo.user_time}. Что хотите сделать?`
+            keyboard = timeSettingsKeyboardUnsub
+        } else {
+            message = 'У вас не настроено время уведомления. Хотите настроить его?'
+            keyboard = timeSettingsKeyboardUnsub
+        }
+        await ctx.reply(message, keyboard)
         ctx.scene.enter('time-menu')
     } catch (err) {
         logger.log('error', `Не удалось узнать время уведомления: ${err}`)

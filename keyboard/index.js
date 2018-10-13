@@ -2,10 +2,11 @@
 
 const Markup = require('telegraf/markup')
 
-const mainMenuKeyboard = Markup.keyboard([['Мои растения'], ['Время уведомления']]).resize().extra()
+const mainMenuKeyboard = Markup.keyboard([['Мои растения'], ['Настройки уведомлений']]).resize().extra()
 const plantMenuFullKeyboard = Markup.keyboard([['Добавить растения'], ['Удалить растения'], ['Назад']]).resize().extra()
 const plantMenuCutKeyboard = Markup.keyboard([['Добавить растения'], ['Назад']]).resize().extra()
-const timeSettingsKeyboard = Markup.keyboard([['Настроить время уведомления'], ['Назад']]).resize().extra()
+const timeSettingsKeyboardSub = Markup.keyboard([['Настроить время уведомления'], ['Подписаться'], ['Назад']]).resize().extra()
+const timeSettingsKeyboardUnsub = Markup.keyboard([['Настроить время уведомления'], ['Отписаться'], ['Назад']]).resize().extra()
 const plantPeriodsKeyboard = Markup.inlineKeyboard([
     [Markup.callbackButton('Каждый день', '1')],
     [Markup.callbackButton('Каждые 2 дня', '2')],
@@ -22,7 +23,8 @@ module.exports = {
     mainMenuKeyboard,
     plantMenuFullKeyboard,
     plantMenuCutKeyboard,
-    timeSettingsKeyboard,
+    timeSettingsKeyboardSub,
+    timeSettingsKeyboardUnsub,
     plantPeriodsKeyboard,
     goBackKeyboard,
     finalAddPlantKeyboard
