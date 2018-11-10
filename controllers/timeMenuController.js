@@ -2,6 +2,7 @@
 
 const { muteUser, unmuteUser} = require('../database/repositories/userRepository')
 const { timeSettingsKeyboardSub, timeSettingsKeyboardUnsub } = require('../keyboard/index')
+const { updatePlantsAfterUnmuteUser } = require('../database/repositories/plantRepository')
 
 function goToSetTime(ctx) {
     ctx.scene.enter('set-time')
@@ -24,6 +25,7 @@ async function unsubUser(ctx) {
 async function subUser(ctx) {
     try {
         await unmuteUser(ctx.message.from.id)
+        await updatePlantsAfterUnmuteUser(ctx.message.from.id)
         ctx.reply('Вы успешно подписались на уведомления', timeSettingsKeyboardUnsub)
     } catch (err) {
         await ctx.reply('Что-то пошло не так. Попробуйте позже')

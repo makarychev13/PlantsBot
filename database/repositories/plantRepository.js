@@ -51,10 +51,22 @@ function updateWateringDate(plantName, telegramId) {
     })
 }
 
+function updatePlantsAfterUnmuteUser(telegramId) {
+    return Plant.update({
+        last_watering_date: fn('ADDDATE', new Date(), col('period'))
+    }, 
+    { 
+        where: { 
+            user_telegram_id: telegramId
+        }
+    })
+}
+
 module.exports = {
     savePlant,
     getAllPlantsName,
     deletePlant,
     getPlantsForWatering,
-    updateWateringDate
+    updateWateringDate,
+    updatePlantsAfterUnmuteUser
 }
